@@ -9,20 +9,24 @@ const App = () => {
   const [librosBloqueados, setLibrosBloqueados] = useState([]);
   const [filtro, setFiltro] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const [totalLibros, setTotalLibros] = useState(0);
 
   useEffect(() => {
     const listaAlmacenada = JSON.parse(localStorage.getItem('listaDeLectura')) || [];
     const librosBloqueadosAlmacenados = JSON.parse(localStorage.getItem('librosBloqueados')) || [];
     setListaDeLectura(listaAlmacenada);
     setLibrosBloqueados(librosBloqueadosAlmacenados);
+    setTotalLibros(listaAlmacenada.length + librosBloqueadosAlmacenados.length);
   }, []);
 
   useEffect(() => {
     localStorage.setItem('listaDeLectura', JSON.stringify(listaDeLectura));
+    setTotalLibros(listaDeLectura.length + librosBloqueados.length);
   }, [listaDeLectura]);
 
   useEffect(() => {
     localStorage.setItem('librosBloqueados', JSON.stringify(librosBloqueados));
+    setTotalLibros(listaDeLectura.length + librosBloqueados.length);
   }, [librosBloqueados]);
 
   const agregarLibroAListaDeLectura = (libro) => {
@@ -75,6 +79,11 @@ const App = () => {
     <div className="App">
       <h1>Organizador de Lecturas</h1>
       {mensaje && <div className="mensaje">{mensaje}</div>}
+      <div className="estadisticas">
+        <p>Total de libros agregados: {totalLibros}</p>
+        <p>Libros en la lista de lectura: {listaDeLectura.length}</p>
+        <p>Libros bloqueados: {librosBloqueados.length}</p>
+      </div>
       <BusquedaDeLibros agregarLibroAListaDeLectura={agregarLibroAListaDeLectura} />
       <Filtro setFiltro={setFiltro} />
       <ListaDeLectura 
