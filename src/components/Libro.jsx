@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const Libro = ({ libro, eliminarLibro, editarLibro }) => {
+const Libro = ({ libro, eliminarLibro, editarLibro, bloquearLibro, desbloquearLibro, esBloqueado }) => {
   const [editando, setEditando] = useState(false);
   const [titulo, setTitulo] = useState(libro.titulo);
   const [autor, setAutor] = useState(libro.autor);
@@ -39,10 +40,24 @@ const Libro = ({ libro, eliminarLibro, editarLibro }) => {
           <p>{libro.descripcion}</p>
           <button onClick={() => setEditando(true)}>Editar</button>
           <button onClick={() => eliminarLibro(libro.id)}>Eliminar</button>
+          {esBloqueado ? (
+            <button onClick={() => desbloquearLibro(libro.id)}>Desbloquear</button>
+          ) : (
+            <button onClick={() => bloquearLibro(libro)}>Bloquear</button>
+          )}
         </div>
       )}
     </div>
   );
+};
+
+Libro.propTypes = {
+  libro: PropTypes.object.isRequired,
+  eliminarLibro: PropTypes.func.isRequired,
+  editarLibro: PropTypes.func.isRequired,
+  bloquearLibro: PropTypes.func,
+  desbloquearLibro: PropTypes.func,
+  esBloqueado: PropTypes.bool
 };
 
 export default Libro;
